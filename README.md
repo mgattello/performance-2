@@ -1,68 +1,39 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## AsyncComponent
 
-## Available Scripts
+It's a Higher-order Component and allows you to import Components only when is needed. It enable Code Splitting, because the import is run after the first import cycle (Dynamic Import).
 
-In the project directory, you can run:
+>  Higher-order Component: a component that return another component
 
-### `yarn start`
+```
+import React, { Component } from 'react';
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+export default function asyncComponent(importComponent)  {
+    ...
+}
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+```
 
-### `yarn test`
+The importComponent is a parameter, that allows to import the component needed. It'll be more clear after. AsyncComponent is still a component with a state: 
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+ this.state = {
+                component: null
+            }
+```
 
-### `yarn build`
+The `async componentDidMount(){ ... }` allows us to set the promise (importComponent) in the state, when loaded. 
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+render(){
+            const Component = this.state.component;
+            return Component ? <Component {...this.props} /> : null
+        }
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+Here is where the magic happen. If Component exists, then render it with all the props; If not return null. `{...this.props}` is a "Spread" operator that helps to access to all the props.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+return AsyncComponent
+```
+At the end we want to render the all component.
 
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
